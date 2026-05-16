@@ -23,7 +23,8 @@ function App() {
 
   // Déterminer si on utilise le mode statique (GitHub Pages)
   useEffect(() => {
-    setUseStaticData(import.meta.env.MODE === 'production' && !window.location.hostname.includes('localhost'));
+    const isProd = (import.meta as any).env.MODE === 'production';
+    setUseStaticData(isProd && !window.location.hostname.includes('localhost'));
   }, []);
 
   // Charger les données
