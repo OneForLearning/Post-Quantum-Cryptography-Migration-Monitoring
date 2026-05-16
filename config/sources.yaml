@@ -326,3 +326,134 @@ sources:
     include_patterns: ["liboqs", "pqc", "post-quantum", "mlkem", "ml-dsa"]
     max_items: 15
     tags: [ecosystem, implementation, open-source]
+
+  # ── Offres d'emploi cryptographie ────────────────────────────────────
+  - name: Indeed US – Cryptography Jobs
+    type: rss
+    url: https://www.indeed.com/rss?q=post-quantum+cryptography&l=Remote&sort=date&fromage=15
+    max_items: 25
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography]
+
+  - name: Indeed US – Cryptographer Jobs
+    type: rss
+    url: https://www.indeed.com/rss?q=cryptographer&l=Remote&sort=date&fromage=15
+    max_items: 25
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography]
+
+  - name: Indeed UK – Cryptography Jobs
+    type: rss
+    url: https://uk.indeed.com/rss?q=cryptography&l=Remote&sort=date&fromage=15
+    max_items: 25
+    enabled: true
+    content_type: job
+    language: en
+    tags: [jobs, cryptography, uk]
+
+  - name: Indeed FR – Cryptographie Jobs
+    type: rss
+    url: https://fr.indeed.com/rss?q=cryptographie+post-quantique&l=Remote&sort=date&fromage=15
+    max_items: 25
+    enabled: true
+    content_type: job
+    language: fr
+    tags: [jobs, cryptography, france]
+
+  - name: RemoteOK – Cryptography
+    type: rss
+    url: https://remoteok.com/remote-cryptography-jobs.rss
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography, remote]
+
+  - name: RemoteOK – Security
+    type: rss
+    url: https://remoteok.com/remote-security-jobs.rss
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, security, remote]
+
+  - name: We Work Remotely – Security
+    type: rss
+    url: https://weworkremotely.com/categories/remote-security-jobs.rss
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, security, remote]
+
+  - name: IACR Job Board
+    type: webpage
+    url: https://www.iacr.org/jobs/
+    include_patterns: ["post-quantum", "lattice", "cryptography", "pqc", "kem", "signature"]
+    max_items: 15
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography, academic]
+
+  - name: Greenhouse – Cloudflare
+    type: greenhouse
+    tokens: ["cloudflare"]
+    include_patterns: ["cryptography", "security", "quantum"]
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography, hiring]
+
+  - name: Greenhouse – PQShield
+    type: greenhouse
+    tokens: ["pqshield"]
+    include_patterns: ["cryptography", "quantum", "pqc"]
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography, hiring]
+
+  - name: Greenhouse – Akamai
+    type: greenhouse
+    tokens: ["akamai"]
+    include_patterns: ["cryptography", "security"]
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, security, hiring]
+
+  - name: Greenhouse – 1Password
+    type: greenhouse
+    tokens: ["1password"]
+    include_patterns: ["cryptography", "security"]
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, security, hiring]
+
+  - name: Greenhouse – HashiCorp
+    type: greenhouse
+    tokens: ["hashicorp"]
+    include_patterns: ["cryptography", "security"]
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, security, hiring]
+
+  - name: Greenhouse – ISARA
+    type: greenhouse
+    tokens: ["isara"]
+    include_patterns: ["cryptography", "quantum", "pqc"]
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography, hiring]
+
+  - name: Lever – SandboxAQ
+    type: lever
+    tokens: ["sandboxaq"]
+    include_patterns: ["cryptography", "quantum", "pqc", "post-quantum"]
+    max_items: 20
+    enabled: true
+    content_type: job
+    tags: [jobs, cryptography, hiring]

@@ -39,6 +39,12 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE items ADD COLUMN language TEXT DEFAULT 'en'")
     if "content_type" not in columns:
         conn.execute("ALTER TABLE items ADD COLUMN content_type TEXT DEFAULT 'other'")
+    if "job_company" not in columns:
+        conn.execute("ALTER TABLE items ADD COLUMN job_company TEXT DEFAULT ''")
+    if "job_location" not in columns:
+        conn.execute("ALTER TABLE items ADD COLUMN job_location TEXT DEFAULT ''")
+    if "job_seniority" not in columns:
+        conn.execute("ALTER TABLE items ADD COLUMN job_seniority TEXT DEFAULT ''")
     conn.commit()
 
 
@@ -60,8 +66,9 @@ def upsert_items(conn: sqlite3.Connection, items: list[Item]) -> int:
             INSERT OR IGNORE INTO items (
                 url, source_name, title, summary, published,
                 tags_json, score, matched_keywords_json, category, sector_tags_json, raw_json,
-                priority, first_seen, language, content_type
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                priority, first_seen, language, content_type,
+                job_company, job_location, job_seniority
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 item.url,
@@ -79,6 +86,9 @@ def upsert_items(conn: sqlite3.Connection, items: list[Item]) -> int:
                 item.first_seen.isoformat() if item.first_seen else now.isoformat(),
                 item.language,
                 item.content_type,
+                item.raw.get("company", ""),
+                item.raw.get("location", ""),
+                item.raw.get("seniority", ""),
             ),
         )
         if cursor.rowcount:

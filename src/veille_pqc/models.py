@@ -8,14 +8,15 @@ from pydantic import BaseModel, Field, HttpUrl
 
 class SourceConfig(BaseModel):
     name: str
-    type: Literal["rss", "webpage"]
-    url: HttpUrl
+    type: Literal["rss", "webpage", "greenhouse", "lever"]
+    url: HttpUrl | None = None
     include_patterns: list[str] = Field(default_factory=list)
     max_items: int = 15
     tags: list[str] = Field(default_factory=list)
     enabled: bool = True
     language: str = "en"
     content_type: str = "other"
+    tokens: list[str] = Field(default_factory=list)
 
 
 class KeywordsConfig(BaseModel):

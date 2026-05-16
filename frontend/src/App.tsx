@@ -4,10 +4,13 @@ import { Header } from './components/Header';
 import { StatsBar } from './components/StatsBar';
 import { FilterBar } from './components/FilterBar';
 import { ItemTable } from './components/ItemTable';
+import { TabNav } from './components/TabNav';
+import { JobsView } from './components/JobsView';
 import { fetchItems, fetchStats, fetchStaticData } from './api';
 import './index.css';
 
 function App() {
+  const [activeTab, setActiveTab] = useState<'veille' | 'jobs'>('veille');
   const [items, setItems] = useState<ItemsResponse | null>(null);
   const [stats, setStats] = useState<StatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -78,25 +81,32 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-        <StatsBar stats={stats} loading={loading} />
-        <FilterBar
-          stats={stats}
-          sort={sort}
-          category={category}
-          sector={sector}
-          search={search}
-          onSortChange={handleSortChange}
-          onCategoryChange={handleCategoryChange}
-          onSectorChange={handleSectorChange}
-          onSearchChange={handleSearch}
-        />
-        <ItemTable
-          data={items}
-          loading={loading}
-          page={page}
-          onPageChange={setPage}
-        />
+      <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {activeTab === 'veille' ? (
+          <div className="space-y-6">
+            <StatsBar stats={stats} loading={loading} />
+            <FilterBar
+              stats={stats}
+              sort={sort}
+              category={category}
+              sector={sector}
+              search={search}
+              onSortChange={handleSortChange}
+              onCategoryChange={handleCategoryChange}
+              onSectorChange={handleSectorChange}
+              onSearchChange={handleSearch}
+            />
+            <ItemTable
+              data={items}
+              loading={loading}
+              page={page}
+              onPageChange={setPage}
+            />
+          </div>
+        ) : (
+          <JobsView />
+        )}
       </main>
     </div>
   );

@@ -11,6 +11,10 @@ export interface Item {
   language: string;
   matched_keywords: string[];
   score: number;
+  content_type: string;
+  job_company: string;
+  job_location: string;
+  job_seniority: string;
 }
 
 export interface ItemsResponse {

@@ -10,11 +10,13 @@ from rapidfuzz import fuzz
 from veille_pqc.classification import classify_category, classify_sectors
 from veille_pqc.collectors import rss as rss_collector
 from veille_pqc.collectors import webpage as webpage_collector
+from veille_pqc.collectors import greenhouse as greenhouse_collector
+from veille_pqc.collectors import lever as lever_collector
 from veille_pqc.config_loader import load_config
 from veille_pqc.models import Item
 from veille_pqc.notifiers.emailer import send_email_with_attachment
 from veille_pqc.reporting import to_csv, to_html, to_markdown
-from veille_pqc.scoring import score_item, classify_priority
+from veille_pqc.scoring import score_item, score_job, classify_priority
 from veille_pqc.storage import open_db, upsert_items
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
@@ -51,11 +53,18 @@ def _collect_items(config_path: str) -> tuple[list[Item], object]:
             items = rss_collector.collect(source)
         elif source.type == "webpage":
             items = webpage_collector.collect(source)
+        elif source.type == "greenhouse":
+            items = greenhouse_collector.collect(source)
+        elif source.type == "lever":
+            items = lever_collector.collect(source)
         else:
             raise ValueError(f"Type de source non supporté: {source.type}")
 
         for item in items:
-            item = score_item(item, cfg.keywords)
+            if item.content_type == "job":
+                item = score_job(item)
+            else:
+                item = score_item(item, cfg.keywords)
             item = classify_category(item, cfg.categories)
             item = classify_sectors(item, cfg.sectors)
             item.priority = classify_priority(item)
@@ -170,7 +179,7 @@ def export_static_json(
         """
         SELECT source_name, title, url, summary, published, tags_json, score,
                matched_keywords_json, category, sector_tags_json, priority,
-               first_seen, language, content_type
+               first_seen, language, content_type, job_company, job_location, job_seniority
         FROM items
         ORDER BY score DESC, published DESC
         """
@@ -192,6 +201,9 @@ def export_static_json(
             "first_seen": row[11],
             "language": row[12],
             "content_type": row[13],
+            "job_company": row[14],
+            "job_location": row[15],
+            "job_seniority": row[16],
         })
     conn.close()
 

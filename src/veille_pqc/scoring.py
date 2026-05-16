@@ -70,3 +70,19 @@ def classify_priority(item: Item) -> str:
     if item.score >= 12:
         return "medium"
     return "low"
+
+
+def score_job(item: Item) -> Item:
+    base = 10
+    seniority = item.raw.get("seniority", "").lower()
+    if seniority in ("senior", "lead", "principal", "staff"):
+        base += 5
+    elif seniority in ("junior", "intern", "associate"):
+        base -= 2
+
+    location = item.raw.get("location", "").lower()
+    if any(loc in location for loc in ("france", "paris", "europe", "uk", "london")):
+        base += 3
+
+    item.score = max(0, base)
+    return item
