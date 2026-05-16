@@ -65,6 +65,26 @@ jobs:
             veille-pqc publish-bundle --bundle-dir dist_bundle
           fi
 
+      - name: Export static JSON
+        shell: bash
+        run: |
+          veille-pqc export-static-json --out dist_bundle/data.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build React frontend
+        shell: bash
+        run: |
+          cd frontend
+          npm install
+          npm run build
+          # Copy built frontend to dist_bundle/app
+          mkdir -p ../dist_bundle/app
+          cp -r dist/* ../dist_bundle/app/
+
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4
         with:

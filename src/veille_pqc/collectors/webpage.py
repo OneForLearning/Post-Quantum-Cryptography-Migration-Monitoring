@@ -88,6 +88,8 @@ def collect(source: SourceConfig) -> list[Item]:
                 url=href,
                 summary="",
                 tags=source.tags.copy(),
+                language=source.language,
+                content_type=source.content_type,
             )
         )
         if len(results) >= source.max_items:

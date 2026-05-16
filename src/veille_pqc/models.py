@@ -13,6 +13,9 @@ class SourceConfig(BaseModel):
     include_patterns: list[str] = Field(default_factory=list)
     max_items: int = 15
     tags: list[str] = Field(default_factory=list)
+    enabled: bool = True
+    language: str = "en"
+    content_type: str = "other"
 
 
 class KeywordsConfig(BaseModel):
@@ -39,3 +42,7 @@ class Item(BaseModel):
     category: str = "other"
     sector_tags: list[str] = Field(default_factory=list)
     raw: dict[str, Any] = Field(default_factory=dict)
+    priority: str = ""
+    first_seen: datetime | None = None
+    language: str = "en"
+    content_type: str = "other"

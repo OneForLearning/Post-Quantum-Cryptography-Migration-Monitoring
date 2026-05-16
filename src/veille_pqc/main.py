@@ -14,7 +14,7 @@ from veille_pqc.config_loader import load_config
 from veille_pqc.models import Item
 from veille_pqc.notifiers.emailer import send_email_with_attachment
 from veille_pqc.reporting import to_csv, to_html, to_markdown
-from veille_pqc.scoring import score_item
+from veille_pqc.scoring import score_item, classify_priority
 from veille_pqc.storage import open_db, upsert_items
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
@@ -45,6 +45,8 @@ def _collect_items(config_path: str) -> tuple[list[Item], object]:
     cfg = load_config(config_path)
     collected: list[Item] = []
     for source in cfg.sources:
+        if not source.enabled:
+            continue
         if source.type == "rss":
             items = rss_collector.collect(source)
         elif source.type == "webpage":
@@ -56,6 +58,7 @@ def _collect_items(config_path: str) -> tuple[list[Item], object]:
             item = score_item(item, cfg.keywords)
             item = classify_category(item, cfg.categories)
             item = classify_sectors(item, cfg.sectors)
+            item.priority = classify_priority(item)
             collected.append(item)
     return deduplicate(collected), cfg
 
@@ -154,6 +157,66 @@ def publish_bundle(
     typer.echo(f"Bundle Markdown     : {md_path}")
     typer.echo(f"Bundle CSV          : {csv_path}")
     typer.echo(f"Bundle SQLite       : {db_target}")
+
+
+@app.command()
+def export_static_json(
+    db: str = typer.Option("data/veille_pqc.db"),
+    out: str = typer.Option("dist_bundle/data.json"),
+) -> None:
+    import json
+    conn = open_db(db)
+    cursor = conn.execute(
+        """
+        SELECT source_name, title, url, summary, published, tags_json, score,
+               matched_keywords_json, category, sector_tags_json, priority,
+               first_seen, language, content_type
+        FROM items
+        ORDER BY score DESC, published DESC
+        """
+    )
+    items = []
+    for row in cursor.fetchall():
+        items.append({
+            "source_name": row[0],
+            "title": row[1],
+            "url": row[2],
+            "summary": row[3],
+            "published": row[4],
+            "tags": json.loads(row[5]),
+            "score": row[6],
+            "matched_keywords": json.loads(row[7]),
+            "category": row[8],
+            "sector_tags": json.loads(row[9]),
+            "priority": row[10],
+            "first_seen": row[11],
+            "language": row[12],
+            "content_type": row[13],
+        })
+    conn.close()
+
+    out_path = Path(out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    from datetime import timezone
+    with out_path.open("w", encoding="utf-8") as f:
+        json.dump({"items": items, "generated": datetime.now(timezone.utc).isoformat()}, f, ensure_ascii=False, indent=2)
+    typer.echo(f"JSON statique exporté : {out_path}")
+
+
+@app.command()
+def serve(
+    host: str = typer.Option("0.0.0.0"),
+    port: int = typer.Option(8000),
+    db: str = typer.Option("data/veille_pqc.db"),
+) -> None:
+    try:
+        import uvicorn
+        from veille_pqc.api.app import create_app
+        api_app = create_app(db)
+        uvicorn.run(api_app, host=host, port=port)
+    except ImportError:
+        typer.echo("FastAPI n'est pas installé. Veuillez exécuter: pip install fastapi uvicorn")
+        raise typer.Exit(1)
 
 
 if __name__ == "__main__":

@@ -31,6 +31,14 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE items ADD COLUMN category TEXT DEFAULT 'other'")
     if "sector_tags_json" not in columns:
         conn.execute("ALTER TABLE items ADD COLUMN sector_tags_json TEXT DEFAULT '[]'")
+    if "priority" not in columns:
+        conn.execute("ALTER TABLE items ADD COLUMN priority TEXT DEFAULT ''")
+    if "first_seen" not in columns:
+        conn.execute("ALTER TABLE items ADD COLUMN first_seen TEXT")
+    if "language" not in columns:
+        conn.execute("ALTER TABLE items ADD COLUMN language TEXT DEFAULT 'en'")
+    if "content_type" not in columns:
+        conn.execute("ALTER TABLE items ADD COLUMN content_type TEXT DEFAULT 'other'")
     conn.commit()
 
 
@@ -44,13 +52,16 @@ def open_db(db_path: str | Path) -> sqlite3.Connection:
 
 def upsert_items(conn: sqlite3.Connection, items: list[Item]) -> int:
     inserted = 0
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
     for item in items:
         cursor = conn.execute(
             """
             INSERT OR IGNORE INTO items (
                 url, source_name, title, summary, published,
-                tags_json, score, matched_keywords_json, category, sector_tags_json, raw_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                tags_json, score, matched_keywords_json, category, sector_tags_json, raw_json,
+                priority, first_seen, language, content_type
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 item.url,
@@ -64,6 +75,10 @@ def upsert_items(conn: sqlite3.Connection, items: list[Item]) -> int:
                 item.category,
                 json.dumps(item.sector_tags, ensure_ascii=False),
                 json.dumps(item.raw, ensure_ascii=False),
+                item.priority,
+                item.first_seen.isoformat() if item.first_seen else now.isoformat(),
+                item.language,
+                item.content_type,
             ),
         )
         if cursor.rowcount:

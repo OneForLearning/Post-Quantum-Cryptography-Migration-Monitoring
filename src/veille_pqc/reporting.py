@@ -78,9 +78,10 @@ def to_html(items: list[Item], output_path: str | Path, sector: str | None = Non
     selected = sort_items(_filter_items(items, sector))
 
     total = len(selected)
-    high = sum(1 for item in selected if classify_priority(item) == "HIGH")
-    medium = sum(1 for item in selected if classify_priority(item) == "MEDIUM")
-    low = sum(1 for item in selected if classify_priority(item) == "LOW")
+    critical = sum(1 for item in selected if classify_priority(item) == "critical")
+    high = sum(1 for item in selected if classify_priority(item) == "high")
+    medium = sum(1 for item in selected if classify_priority(item) == "medium")
+    low = sum(1 for item in selected if classify_priority(item) == "low")
     generated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%SZ")
 
     rows = []
@@ -129,9 +130,10 @@ def to_html(items: list[Item], output_path: str | Path, sector: str | None = Non
   <div class=\"muted\">Généré le {generated}</div>
   <div class=\"cards\">
     <div class=\"card\"><div class=\"label\">Total</div><div class=\"value\">{total}</div></div>
-    <div class=\"card\"><div class=\"label\">HIGH</div><div class=\"value\">{high}</div></div>
-    <div class=\"card\"><div class=\"label\">MEDIUM</div><div class=\"value\">{medium}</div></div>
-    <div class=\"card\"><div class=\"label\">LOW</div><div class=\"value\">{low}</div></div>
+    <div class=\"card\"><div class=\"label\">Critical</div><div class=\"value\">{critical}</div></div>
+    <div class=\"card\"><div class=\"label\">High</div><div class=\"value\">{high}</div></div>
+    <div class=\"card\"><div class=\"label\">Medium</div><div class=\"value\">{medium}</div></div>
+    <div class=\"card\"><div class=\"label\">Low</div><div class=\"value\">{low}</div></div>
   </div>
   <table>
     <thead>

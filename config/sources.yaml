@@ -20,6 +20,13 @@ keywords:
     - fips 203
     - fips 204
     - fips 205
+    - anssi
+    - bsi
+    - quantum-resistant
+    - lattice-based
+    - sntrup761
+    - hybrid kem
+    - tls hybrid
   medium_priority:
     - x25519mlkem768
     - x-wing
@@ -223,6 +230,52 @@ sources:
     max_items: 20
     tags: [research, implementation]
 
+  # ── Organismes gouvernementaux européens ─────────────────────────────
+  - name: ANSSI Actualités
+    type: rss
+    url: https://cyber.gouv.fr/flux-rss/actualites.xml
+    max_items: 20
+    language: fr
+    tags: [official, eu, france, standards]
+
+  - name: BSI Press Releases
+    type: rss
+    url: https://www.bsi.bund.de/SiteGlobals/Functions/RSSFeed/EN/RSSFeed_Presse/RSSFeed_Presse_node.html
+    max_items: 20
+    tags: [official, eu, germany, standards]
+
+  - name: BSI Cyber Security Publications
+    type: rss
+    url: https://www.bsi.bund.de/SiteGlobals/Functions/RSSFeed/EN/RSSFeed_Publikationen/RSSFeed_Publikationen_node.html
+    max_items: 20
+    tags: [official, eu, germany, research]
+
+  # ── Industrie spécialisée en PQC ────────────────────────────────────
+  - name: Open Quantum Safe Blog
+    type: rss
+    url: https://openquantumsafe.org/feed.xml
+    max_items: 15
+    tags: [implementation, open-source, oqs]
+
+  - name: PQShield Blog
+    type: rss
+    url: https://pqshield.com/feed/
+    max_items: 15
+    tags: [industry, implementation, research]
+
+  - name: Thales Group – Cybersecurity Blog
+    type: rss
+    url: https://cpl.thalesgroup.com/blog/feed
+    max_items: 15
+    tags: [industry, cloud, implementation]
+
+  # ── Releases supplémentaires ────────────────────────────────────────
+  - name: GitHub Releases Bouncy Castle (Kotlin)
+    type: rss
+    url: https://github.com/bcgit/bc-kotlin/releases.atom
+    max_items: 10
+    tags: [implementation, open-source, releases]
+
   # ── Pages web officielles (avec tolérance 403) ───────────────────────
   - name: NIST PQC Project News
     type: webpage
@@ -230,6 +283,35 @@ sources:
     include_patterns: ["pqc", "news", "standard", "draft", "fips"]
     max_items: 20
     tags: [official, standards, news]
+
+  - name: NSA Post-Quantum Resources
+    type: webpage
+    url: https://www.nsa.gov/Cybersecurity/Post-Quantum-Cybersecurity-Resources/
+    include_patterns: ["quantum", "cnsa", "pqc", "post-quantum", "algorithm"]
+    max_items: 15
+    tags: [official, standards, nsa]
+
+  - name: ANSSI Cryptographie Post-Quantique
+    type: webpage
+    url: https://cyber.gouv.fr/enjeux-technologiques/cryptographie-post-quantique/
+    include_patterns: ["quantique", "post-quantum", "pqc", "migration", "nist"]
+    max_items: 15
+    language: fr
+    tags: [official, eu, france, standards]
+
+  - name: BSI Post-Quantum Cryptography
+    type: webpage
+    url: https://www.bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/Quantentechnologien-und-Post-Quanten-Kryptografie/quantentechnologien-und-post-quanten-kryptografie_node.html
+    include_patterns: ["quantum", "post-quantum", "cryptography", "algorithm"]
+    max_items: 15
+    tags: [official, eu, germany, standards]
+
+  - name: NIST PQC Finalists & Standards
+    type: webpage
+    url: https://csrc.nist.gov/Projects/post-quantum-cryptography/selected-algorithms-2022
+    include_patterns: ["pqc", "algorithm", "fips", "standard", "ml-kem", "ml-dsa"]
+    max_items: 20
+    tags: [official, standards, nist]
 
   - name: ETSI Quantum Safe
     type: webpage
