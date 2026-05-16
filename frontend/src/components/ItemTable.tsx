@@ -1,4 +1,4 @@
-import type { Item, ItemsResponse } from '../types';
+import type { ItemsResponse } from '../types';
 import { ItemRow } from './ItemRow';
 
 interface ItemTableProps {

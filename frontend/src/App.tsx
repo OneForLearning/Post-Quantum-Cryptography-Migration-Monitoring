@@ -6,7 +6,7 @@ import { FilterBar } from './components/FilterBar';
 import { ItemTable } from './components/ItemTable';
 import { TabNav } from './components/TabNav';
 import { JobsView } from './components/JobsView';
-import { fetchItems, fetchStats, fetchStaticData } from './api';
+import { fetchItems, fetchStats } from './api';
 import './index.css';
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
 
   // Déterminer si on utilise le mode statique (GitHub Pages)
   useEffect(() => {
-    setUseStaticData(import.meta.env.PROD && !window.location.hostname.includes('localhost'));
+    setUseStaticData(import.meta.env.MODE === 'production' && !window.location.hostname.includes('localhost'));
   }, []);
 
   // Charger les données
@@ -34,10 +34,10 @@ function App() {
 
         if (useStaticData) {
           // Mode statique : une seule requête pour tout
-          const staticData = await fetchStaticData();
-          setItems(staticData);
+          const itemsData = await fetchItems(sort, 'desc', category || undefined, sector || undefined, undefined, search, page, 25);
+          setItems(itemsData);
           // Générer les stats à partir des items statiques
-          const stats = generateStats(staticData.items);
+          const stats = generateStats(itemsData.items);
           setStats(stats);
         } else {
           // Mode API
