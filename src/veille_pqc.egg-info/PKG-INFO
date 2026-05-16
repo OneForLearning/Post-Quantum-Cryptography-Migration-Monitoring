@@ -16,6 +16,8 @@ Requires-Dist: typer>=0.15.4
 Requires-Dist: python-dateutil==2.9.0.post0
 Requires-Dist: pandas==2.2.3
 Requires-Dist: streamlit==1.39.0
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: uvicorn[standard]>=0.32.0
 
 # veille-pqc — GitHub Automation Edition
 
