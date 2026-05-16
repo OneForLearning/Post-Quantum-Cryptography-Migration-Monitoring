@@ -67,11 +67,11 @@ export function JobTable({ jobs, page, per_page, total, onPageChange }: JobTable
                   </a>
                 </div>
               </td>
-              <td className="px-4 py-3 text-sm text-gray-600">{job.job_company || '—'}</td>
-              <td className="px-4 py-3 text-sm text-gray-600">{job.job_location || '—'}</td>
+              <td className="px-4 py-3 text-sm text-gray-600">{job.job_company?.trim() || '—'}</td>
+              <td className="px-4 py-3 text-sm text-gray-600">{job.job_location?.trim() || '—'}</td>
               <td className="px-4 py-3 text-sm">
-                {job.job_seniority ? (
-                  <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${seniorityColors[job.job_seniority] || 'bg-gray-100 text-gray-900'}`}>
+                {job.job_seniority?.trim() ? (
+                  <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${seniorityColors[job.job_seniority.toLowerCase()] || 'bg-gray-100 text-gray-900'}`}>
                     {job.job_seniority}
                   </span>
                 ) : (
